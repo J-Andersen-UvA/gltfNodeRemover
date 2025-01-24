@@ -3,10 +3,33 @@ const path = require('path');
 const { NodeIO } = require('@gltf-transform/core');
 const { prune } = require('@gltf-transform/functions');
 
+// Command-line argument handling
+const args = require('yargs/yargs')(process.argv.slice(2))
+    .option('input', {
+        alias: 'i',
+        type: 'string',
+        description: 'Input folder containing GLTF/GLB files',
+        default: './in',
+    })
+    .option('output', {
+        alias: 'o',
+        type: 'string',
+        description: 'Output folder for processed files',
+        default: './out',
+    })
+    .option('overwrite', {
+        alias: 'w',
+        type: 'boolean',
+        description: 'Overwrite input files',
+        default: false,
+    })
+    .help()
+    .argv;
+
 // Configuration
-const inputFolder = './in'; // Input folder containing GLTF/GLB files
-const outputFolder = './out'; // Output folder for processed files
-const overwrite = false; // Set to true to overwrite input files
+const inputFolder = args.input;
+const outputFolder = args.output;
+const overwrite = args.overwrite;
 
 // Remove all markers and system nodes
 const nodesToRemove = [
